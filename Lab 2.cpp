@@ -63,6 +63,13 @@ template<typename T> struct List {
 };
 
 
+void AssignmentOfListOfArguments(List<Argument>& result, List<Argument> rhs) {
+    while (rhs.head) {
+        result.PushBack(rhs.head->data);
+        rhs.head = rhs.head->next;
+    }
+}
+
 struct TempArgForCalculation {
     int index;
     bool value;
@@ -73,13 +80,23 @@ struct NodeForDnf {
     NodeForDnf* next;
 };
 
+void PrintSet(List<TempArgForCalculation>* set) {
+    Node<TempArgForCalculation>* temp_set = set->head;
+    while (temp_set) {
+        cout << temp_set->data.value;
+        temp_set = temp_set->next;
+    }
+    cout << endl;
+}
+
 struct Dnf {
     NodeForDnf* head_of_dnf;
     List<bool> value;
     Dnf() {
         head_of_dnf = NULL;
     }
-    
+
+    //be careful
     void PushFront(List<Argument>* a) {
         NodeForDnf* temp = new NodeForDnf;
         temp->data = a;
@@ -90,6 +107,7 @@ struct Dnf {
     void CalculateDnf(int n) {
         int quantity_of_sets = (int)pow(2, n);
         for (int i = 0; i < quantity_of_sets; i++) {
+            //зберегти вказівник на початок
             bool temp_value_of_conjuction;
             NodeForDnf* temp_head = head_of_dnf;
             Node<Argument>* temp_head_of_elementary_conjuction = NULL;
@@ -99,19 +117,21 @@ struct Dnf {
                 TempArgForCalculation temp;
                 temp.index = j;
                 temp.value = (bool)(i & mask);
-                set->PushBack(temp);
+                set->PushFront(temp);
             }
+            //PrintSet(set);
             while (temp_head) {
+                //temp_value_of_conjuction = true;
                 temp_value_of_conjuction = true;
-                Node<TempArgForCalculation>* temp_head_of_set = set->head;//+
                 temp_head_of_elementary_conjuction = temp_head->data->head;//+
                 bool is_break(false);
                 while (temp_head_of_elementary_conjuction) {//+
+                    Node<TempArgForCalculation>* temp_head_of_set = set->head;
+                    //цей цикл проблемний(може рахувати лише ЕК з 1 змінною)
                     while (temp_head_of_set) {//
-
                         if (temp_head_of_elementary_conjuction->data.index == temp_head_of_set->data.index) {//+
-                            temp_value_of_conjuction = temp_value_of_conjuction&&temp_head_of_elementary_conjuction->data.ApplyOperation(temp_head_of_set->data.value);
-                            if (!temp_value_of_conjuction) { 
+                            temp_value_of_conjuction = temp_value_of_conjuction && temp_head_of_elementary_conjuction->data.ApplyOperation(temp_head_of_set->data.value);
+                            if (!temp_value_of_conjuction) {
                                 is_break = true;
                             }
                             break;
@@ -121,6 +141,8 @@ struct Dnf {
                     if (is_break) break;
                     temp_head_of_elementary_conjuction = temp_head_of_elementary_conjuction->next;
                 }
+                //temp_head_of_set = set->head;
+               // cout << temp_value_of_conjuction << endl;
                 temp_head = temp_head->next;
                 if (temp_value_of_conjuction) {
                     value.PushFront(temp_value_of_conjuction);
@@ -190,8 +212,3 @@ int main() {
     PrintList(second_func);
     IsImplicateFunctionsEachOther(first_func, second_func);
 }
-
-
-/*0!
-3!
-1! 2.*/
