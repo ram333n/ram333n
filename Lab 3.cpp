@@ -239,9 +239,9 @@ int main()
     cout << endl;
     Matrix m2("Matr2.txt");
     m2.print();
-    cout << endl << "Sum:" << endl;
-    Matrix m3 = Adding(m1, m2);
-    m3.print();
+   // cout << endl << "Sum:" << endl;
+   // Matrix m3 = Adding(m1, m2);
+   // m3.print();
     cout << endl << "Multiply:" << endl;
     Matrix m4 = multiply(m1, m2);
     m4.print();
