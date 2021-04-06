@@ -253,7 +253,7 @@ int main() {
             case '1': {
                 cout << "Enter the information about words(5 times) \n";
                 Data d;
-                for (size_t i = 0; i < 5; ++i) {
+                for (int i = 0; i < 5; ++i) {
                     cin >> d;
                     dictionary.insert(d, true);
                 }
