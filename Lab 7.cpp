@@ -128,7 +128,7 @@ double CalculateArea(const int& a, const int& b, const int& c) {
 }
 
 void Task6(const int graph[TEST_SIZE][TEST_SIZE]) {
-    Cycle result[25];
+    Cycle result[5];
     int current_idx(0);
     for (int i = 0; i < TEST_SIZE; ++i) {
         for (int j = i + 1; j < TEST_SIZE; ++j) {
@@ -143,8 +143,10 @@ void Task6(const int graph[TEST_SIZE][TEST_SIZE]) {
             }
         }
     }
+    MergeSort(result, 0, current_idx-1);
+
     cout << "Task 6 : ";
-    for (int i = 0; result[i].area != -1; ++i) {
+    for (int i = 0; i < 5; ++i) {
         cout << "{(" << result[i].vertices[0] << ", " << result[i].vertices[1] << ", " << result[i].vertices[2] << "), " << result[i].area << "}; ";
     }
     cout << endl << endl;
